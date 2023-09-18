@@ -8,8 +8,6 @@ export default function SignedOut({ signIn }) {
                 <Button onClick={signIn} primary>Log In</Button>
                 <Button primary style={{ marginLeft: "0.5em" }}>Register</Button>
             </Menu.Item>
-
-
         </div>
     )
 }

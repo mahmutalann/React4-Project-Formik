@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { Icon, Menu, Table } from 'semantic-ui-react'
+import { Button, Icon, Menu, Table } from 'semantic-ui-react'
 import ProductService from '../services/productService';
 import { Link } from 'react-roter-dom'
+import { useDispatch } from 'react-redux';
+import { addToCart } from "../store/actions/cartActions";
+import { toast } from "react-toastify"
 
 export default function ProductList() {
+
+  const dispatch = useDispatch() //Dispatch calls the function or action.
+
   const [products, setProducts] = useState([]);
 
   useEffect(() => { //When component/page loads, this code block will run.
@@ -11,6 +17,16 @@ export default function ProductList() {
     productService.getProducts().then(result => setProducts(result.data.data))
   }, [])
 
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product)) //Product is payload.
+    toast.success(`${product.productName} Added to Cart!`)
+  }
+
+  /*Same as above
+  function handleAddToCart(params){
+  
+  }
+  */
   return (
     <div>
       <Table celled>
@@ -21,22 +37,24 @@ export default function ProductList() {
             <Table.HeaderCell>Units In Stock</Table.HeaderCell>
             <Table.HeaderCell>Describe</Table.HeaderCell>
             <Table.HeaderCell>Category</Table.HeaderCell>
+            <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
 
         <Table.Body>
-          {
-            products.map((product) => (
-              <Table.Row key={product.id}>
-                <Table.Cell><Link to={`/products/${product.productName}`}>{product.productName}</Link></Table.Cell>
-                <Table.Cell>{product.unitPrice}</Table.Cell>
-                <Table.Cell>{product.unitsInStock}</Table.Cell>
-                <Table.Cell>{product.quantityPerUnit}</Table.Cell>
-                <Table.Cell>{product.category.categoryName}</Table.Cell>
-              </Table.Row>
-            ))
+          {products.map((product) => (
+            <Table.Row key={product.id}>
+              <Table.Cell><Link to={`/products/${product.productName}`}>{product.productName}</Link></Table.Cell>
+              <Table.Cell>{product.unitPrice}</Table.Cell>
+              <Table.Cell>{product.unitsInStock}</Table.Cell>
+              <Table.Cell>{product.quantityPerUnit}</Table.Cell>
+              <Table.Cell>{product.category.categoryName}</Table.Cell>
+              <Table.Cell>
+                <Button onClick={() => handleAddToCart(product)}>Add To Cart</Button>
+              </Table.Cell>
+            </Table.Row>
+          ))
           }
-
         </Table.Body>
 
         <Table.Footer>

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { Button, Card, Image } from 'semantic-ui-react'
 import ProductService from "../services/productService";
 
 export default function ProductDetail() {
-    let { name } = useParams()
+
+    let { name } = useParams();
 
     const [product, setProduct] = useState({});
 
@@ -12,6 +13,7 @@ export default function ProductDetail() {
         let productService = new ProductService()
         productService.getByProductName(name).then(result => setProduct(result.data.data))
     }, [])
+
     return (
         <div>
             <Card.Group>
